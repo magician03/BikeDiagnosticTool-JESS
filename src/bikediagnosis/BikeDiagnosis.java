@@ -83,7 +83,12 @@ public class BikeDiagnosis extends JFrame {
 		JButton btnAbout = new JButton("Creators");
 		btnAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String msg = "<Group members names here>";
+				String msg = "<Group members names here>\n"
+                                        + "IIT2015060" + "  IIT2015051   \n" + "IIT2015035" + "  IIT2015062   \n"
+                                        + "IIT2015056" + "  IIT2015029   \n" + "IIT2015055" + "  IIT2015041   \n"
+                                        + "IIT2015033" + "  IIT2015030   \n" + "RIT2015031" + "  RIT2015041   \n"
+                                        + "IIT2015031";
+;
 				JOptionPane.showMessageDialog(null, msg,"JESS Project by",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});

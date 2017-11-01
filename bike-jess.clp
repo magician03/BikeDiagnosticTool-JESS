@@ -57,35 +57,57 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Heat rules
 
-(defrule MAIN::check-heat
+(defrule MAIN::check-heatnormal
   (declare (auto-focus TRUE))
   (answer (ident sound) (text yes))
-  (answer (ident seek) (text no))
+  (answer (ident seek) (text yes))
+  (answer (ident boot-begins) (text no))
+  (answer (ident battery-charge) (text yes))
   (answer (ident does-beep) (text yes))
   (answer (ident how-many-beeps) (text ?t))
   (test (< (integer ?t) 3))
   =>
   (assert (check battery-charge))
-  (recommend-action "have to fill the water tank"))
-
-(defrule MAIN::unknown-heat
-  (declare (auto-focus TRUE))
-  (answer (ident sound) (text yes))
-  (answer (ident seek) (text no))
-  (answer (ident does-beep) (text no))
-  =>
-  (recommend-action "have to turn off the Engine")
+  (recommend-action "have to fill the water tank")
   (halt))
 
-(defrule MAIN::Engine
+(defrule MAIN::check-heat
   (declare (auto-focus TRUE))
   (answer (ident sound) (text yes))
-  (answer (ident seek) (text no))
+  (answer (ident seek) (text yes))
+  (answer (ident boot-begins) (text no))
+  (answer (ident battery-charge) (text yes))
   (answer (ident does-beep) (text yes))
   (answer (ident how-many-beeps) (text ?t))
   (test (>= (integer ?t) 3))
   =>
+  (assert (check battery-charge))
+  (recommend-action "Turn off engine and go to mechanic for overheat")
+  (halt))
+
+
+(defrule MAIN::Engine
+  (declare (auto-focus TRUE))
+  (answer (ident sound) (text yes))
+  (answer (ident seek) (text yes))
+  (answer (ident does-beep) (text no))
+  (answer (ident boot-begins) (text no))
+  (answer (ident battery-charge) (text yes))
+  (answer (ident tire-pressure) (text yes))
+  =>
   (recommend-action "have to go to the mechanic!")
+  (halt))
+
+(defrule MAIN::tirepressure
+  (declare (auto-focus TRUE))
+  (answer (ident sound) (text yes))
+  (answer (ident seek) (text yes))
+  (answer (ident does-beep) (text no))
+  (answer (ident boot-begins) (text no))
+  (answer (ident battery-charge) (text yes))
+  (answer (ident tire-pressure) (text no))
+  =>
+  (recommend-action "have to fill tire")
   (halt))
 
 (defrule MAIN::no-fuel
@@ -93,6 +115,7 @@
   (answer (ident sound) (text yes))
   (answer (ident seek) (text yes))
   (answer (ident boot-begins) (text no))
+  (answer (ident battery-charge) (text no))
   =>
   (recommend-action "have to fill the fuel tank")
   (halt))
@@ -103,6 +126,16 @@
   (answer (ident seek) (text yes))
   (answer (ident boot-begins) (text yes))
   =>
+  (recommend-action "bike is working")
+  (halt))
+
+(defrule MAIN::bike-notworks
+  (declare (auto-focus TRUE))
+  (answer (ident sound) (text yes))
+  (answer (ident seek) (text yes))
+  (answer (ident boot-begins) (text no))
+  (answer (ident battery-charge) (text yes))
+  =>
   (recommend-action "consult a bike mechanic expert")
   (halt))
 
@@ -111,20 +144,12 @@
 
 (defrule MAIN::battery-charge
   (declare (auto-focus TRUE))
-  (check battery-charge)
-  (answer (ident battery-charge) (text yes))
+  (answer (ident sound) (text yes))
+  (answer (ident seek) (text no))
   =>
   (recommend-action "have to charage the battery")
   (halt))
 
-(defrule MAIN::battery-broken
-  (declare (auto-focus TRUE))
-  (check battery-charge)
-  (answer (ident battery-charge) (text no))
-  =>
-  (recommend-action "have to replace your battery")
-  (halt))
-  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; bikes mode rules
 
@@ -219,7 +244,7 @@
 ;; Main window
 (defglobal ?*frame* = (new JFrame "bikes Expert System"))
 (?*frame* setDefaultCloseOperation (get-member JFrame EXIT_ON_CLOSE))
-(?*frame* setSize 500 250)
+(?*frame* setSize 500 350)
 (?*frame* setVisible TRUE)
 
 
@@ -269,12 +294,14 @@
             (text "is the battery fully charged?"))
   (question (ident does-beep) (type multi) (valid yes no)
             (text "Does the heat alarm makes beep?"))
-  (question (ident how-many-beeps) (type number) (valid)
+  (question (ident how-many-beeps) (type number) (valid yes no)
             (text "How many times does it beep?"))
   (question (ident battery-charge) (type multi) (valid yes no)
             (text "Does the fuel tank is full ?"))
   (question (ident boot-begins) (type multi) (valid yes no)
             (text "Does the bike working now?"))
+  (question (ident tire-pressure) (type multi) (valid yes no)
+	    (text "Is tire pressure normal?"))
   (ask hardware))
 
   
