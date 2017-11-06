@@ -287,7 +287,7 @@
   (question (ident hardware) (type multi) (valid Manual Automatic Other)
             (text "What kind of system bike?"))
   (question (ident sound) (type multi) (valid yes no)
-            (text "Does engine work lodudly?"))
+            (text "Does engine work loudly?"))
   (question (ident engine-on) (type multi) (valid yes no)
             (text "dose the engine power on ?"))
   (question (ident seek) (type multi) (valid yes no)
