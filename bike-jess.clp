@@ -62,12 +62,12 @@
   (answer (ident sound) (text yes))
   (answer (ident seek) (text yes))
   (answer (ident boot-begins) (text no))
-  (answer (ident battery-charge) (text yes))
+  (answer (ident fuel) (text yes))
   (answer (ident does-beep) (text yes))
   (answer (ident how-many-beeps) (text ?t))
   (test (< (integer ?t) 3))
   =>
-  (assert (check battery-charge))
+  (assert (check fuel))
   (recommend-action "have to fill the water tank")
   (halt))
 
@@ -76,12 +76,12 @@
   (answer (ident sound) (text yes))
   (answer (ident seek) (text yes))
   (answer (ident boot-begins) (text no))
-  (answer (ident battery-charge) (text yes))
+  (answer (ident fuel) (text yes))
   (answer (ident does-beep) (text yes))
   (answer (ident how-many-beeps) (text ?t))
   (test (>= (integer ?t) 3))
   =>
-  (assert (check battery-charge))
+  (assert (check fuel))
   (recommend-action "Turn off engine and go to mechanic for overheat")
   (halt))
 
@@ -92,7 +92,7 @@
   (answer (ident seek) (text yes))
   (answer (ident does-beep) (text no))
   (answer (ident boot-begins) (text no))
-  (answer (ident battery-charge) (text yes))
+  (answer (ident fuel) (text yes))
   (answer (ident tire-pressure) (text yes))
   =>
   (recommend-action "have to go to the mechanic!")
@@ -104,7 +104,7 @@
   (answer (ident seek) (text yes))
   (answer (ident does-beep) (text no))
   (answer (ident boot-begins) (text no))
-  (answer (ident battery-charge) (text yes))
+  (answer (ident fuel) (text yes))
   (answer (ident tire-pressure) (text no))
   =>
   (recommend-action "have to fill tire")
@@ -115,7 +115,7 @@
   (answer (ident sound) (text yes))
   (answer (ident seek) (text yes))
   (answer (ident boot-begins) (text no))
-  (answer (ident battery-charge) (text no))
+  (answer (ident fuel) (text no))
   =>
   (recommend-action "have to fill the fuel tank")
   (halt))
@@ -134,7 +134,7 @@
   (answer (ident sound) (text yes))
   (answer (ident seek) (text yes))
   (answer (ident boot-begins) (text no))
-  (answer (ident battery-charge) (text yes))
+  (answer (ident fuel) (text yes))
   =>
   (recommend-action "consult a bike mechanic expert")
   (halt))
@@ -142,7 +142,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Battery rules
 
-(defrule MAIN::battery-charge
+(defrule MAIN::fuel
   (declare (auto-focus TRUE))
   (answer (ident sound) (text yes))
   (answer (ident seek) (text no))
@@ -285,19 +285,19 @@
 
 (deffacts MAIN::question-data
   (question (ident hardware) (type multi) (valid Manual Automatic Other)
-            (text "What kind of system bike?"))
+            (text "What kind of system bike is it?"))
   (question (ident sound) (type multi) (valid yes no)
             (text "Does engine work loudly?"))
   (question (ident engine-on) (type multi) (valid yes no)
-            (text "dose the engine power on ?"))
+            (text "Is the engine power on ?"))
   (question (ident seek) (type multi) (valid yes no)
-            (text "is the battery fully charged?"))
+            (text "Is the battery fully charged?"))
   (question (ident does-beep) (type multi) (valid yes no)
             (text "Does the heat alarm makes beep?"))
   (question (ident how-many-beeps) (type number) (valid yes no)
             (text "How many times does it beep?"))
-  (question (ident battery-charge) (type multi) (valid yes no)
-            (text "Does the fuel tank is full ?"))
+  (question (ident fuel) (type multi) (valid yes no)
+            (text "Is there any fuel?"))
   (question (ident boot-begins) (type multi) (valid yes no)
             (text "Does the bike working now?"))
   (question (ident tire-pressure) (type multi) (valid yes no)
