@@ -299,11 +299,11 @@
   (question (ident fuel) (type multi) (valid yes no)
             (text "Is there any fuel?"))
   (question (ident boot-begins) (type multi) (valid yes no)
-            (text "Does the bike working now?"))
+            (text "Is the bike working now?"))
   (question (ident tire-pressure) (type multi) (valid yes no)
 	    (text "Is tire pressure normal?"))
   (ask hardware))
 
-  
+
 (reset)
 (run-until-halt)
